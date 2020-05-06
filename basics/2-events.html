@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <button v-on:click="increase">Click Me</button>
+        <button v-on:click="increaseByTwo(2)">Add Two</button>
+        <button v-on:click="doubleIt(counter, $event)">Double It</button>
+        <button v-on:click="counter += 5">Inline Increment By Five(JS)</button>
+        <p>{{ counter }}</p>
+        <p> Counter times two (inline JavaScript) {{ counter * 2 }}</p>
+
+        <p>{{ counter > 50 ? "Greater Than 50" : counter }}</p> <!-- inline javascript allowed-->
+
+        <p v-on:mousemove="updateCoordinates">
+            Coordinates: {{ x }} / {{ y }}
+             - <span v-on:mousemove="dummy">DUMMY SPOT</span>
+             - <span v-on:mousemove.stop="">DEAD SPOT(modifier)</span> <!-- Using Modifiers. SEE VUE MODIFIERS -->
+             - <span v-on:mousemove.stop.prevent>DEAD SPORT(chained modifier)</span> <!-- modifiers can be chained -->
+        </p>
+
+        <input type="text" v-on:keyup.enter="alertMe"> <!-- using event modifier to alert when enter key pressed -->
+        <input type="text" v-on:keyup.enter.space="alertMe"> <!-- will also alert on space key up -->
+    </div> 
+</body>
+ 
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            counter: 0,
+            x: 0, 
+            y: 0, 
+        },
+        methods: {
+            increase: function() { // don't use arrow functions
+                this.counter++; 
+            },
+            increaseByTwo: function(step) { // you can pass your own arguments 
+                this.counter += step; 
+            },
+            doubleIt: function (count, event) {
+                this.counter += count 
+                // use event if you want here
+            },
+            updateCoordinates: function(event) { // event object is passed automatically (by DOM ??)
+                this.x = event.clientX; 
+                this.y = event.clientY; 
+            },
+            dummy: function(event) {
+                event.stopPropagation();
+                console.log("Over Dummy Spot")
+            },
+            alertMe: function() {
+                alert('Alert!!')
+            }
+        }
+    })
+</script>
+
+</html> 

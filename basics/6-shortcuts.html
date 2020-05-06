@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- use @ instead of v-on: -->
+        <button v-on:click="changeLink">Change Link</button>
+        <button @click="changeLink">Change Link (v-on shortcut)</button>
+        <br />
+        
+        <!-- use : instead of v-bind: -->
+        <a v-bind:href="link">{{ link.split('//')[1].split('.')[0]}}</a>
+        <br />
+        <a :href="link">{{ link.split('//')[1].split('.')[0]}} (v-bind shortcut)</a>
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            link: 'https://google.com'
+        },
+        methods: {
+            changeLink: function() {
+                this.link = 'https://apple.com'
+            }
+        }
+    })
+</script>
+
+</html>

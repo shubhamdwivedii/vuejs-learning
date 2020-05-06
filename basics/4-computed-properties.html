@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+
+        <input v-model="name" type="text">
+
+        <button v-on:click="increase"> Bad Increase</button>
+        <button v-on:click="decrease"> Bad Decrease</button>
+        
+        <button v-on:click="counter++">Increase (Inline)</button>
+        <button v-on:click="counter--">Decrease (Inline)</button>
+
+        <p>Counter: {{ counter }}</p>
+        <p>Result(data): {{ result }}</p>
+        <p>Result(method): {{ resultMethod() }}</p> <!-- resultMethod() function will get executed everytime this page is re-rendered BAD -->
+        <!-- Even when name is changed, resultMethod() will be called again BAD-->
+        <p>Result(computed): {{ resultComputed }}</p> <!-- do not use Computed properties like functions, use them like normal data properties -->
+        <!-- computed properties are not called when any other data (name) is changed -->
+
+
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            counter: 0, 
+            name: 'Shubham', 
+            result: '', 
+        },
+        computed: {
+            resultComputed: function() { // BEST way will not get run on every re-render, only when counter is changed. 
+                console.log("resultComputed called") // will not get logged when name is changed.
+                return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5'; // Better way than above 
+                // VueJS is aware that we used this.counter here
+                // Result is cached
+            }
+        },
+        methods: {
+            increase: function() {
+                this.counter++; 
+                this.result = this.counter > 5 ? 'Greater than 5' : 'Smaller than 5'; // BAD - Repeated Code
+            },
+            decrease: function() {
+                this.counter--; 
+                this.result = this.counter > 5 ? 'Greater than 5' : 'Smaller than 5'; // BAD - Repeated Code
+            },
+            resultMethod() { // you can use this es6 syntax too (not all browsers support)
+                console.log("resultMethod called") 
+                return this.counter > 5 ? 'Greater than 5' : 'Smaller than 5'; // Better way than above 
+                // VueJS is NOT aware that we used this.counter here.
+            }
+        }
+    })
+</script>
+
+</html> 

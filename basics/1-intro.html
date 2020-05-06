@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="vue.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <h2>{{ renderHeading() }}</h2>
+      <input type="text" v-on:input="changeTitle" />
+      <p v-once>{{ name }}</p> <!-- use v-once to stick with the initial value -->
+      
+      <p>
+        {{ greet }} {{ name }}
+      </p>
+      <h3>ShoutOut to my boy {{ shoutOut() }}</h3>
+      
+      <a v-bind:href="link">Go To Google</a>
+      <!-- use v-bind to bind html elements to vue data -->
+
+      <p>{{ htmlLink }}</p> <!-- default behaviour is safe as vue escapes html -->
+      <p v-html="htmlLink"></p> <!-- use carefully, can expose to cross site scripting attacks -->
+
+    </div>
+  </body>
+
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        // access this object using "this" in methods
+        greet: "Hello",
+        name: "Shubham!",
+        link: "https://www.google.com",
+        htmlLink: '<a href="https://www.google.com">Google</a>'
+      },
+      methods: {
+        renderHeading: function() {
+          return "Welcome to VueJS";
+        },
+        changeTitle: function(event) {
+          this.name = event.target.value;
+        },
+        shoutOut: function() {
+          return this.name.toUpperCase();
+        }
+      }
+    });
+  </script>
+</html>

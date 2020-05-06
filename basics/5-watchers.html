@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+        <button v-on:click="counter++">Increase</button>
+        <button v-on:click="counter--">Decrease</button>
+        <p>Counter: {{ counter }}</p>
+    </div>
+  </body>
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+          counter: 0
+      },
+
+      // Use computed properites wherever you can
+
+      // Use computed properties for synchronous tasks
+
+      // Use watch properties for asynchrounous tasks
+
+      watch: { // To react to change
+          counter: function(value) { // will reset counter after every two seconds
+            let vm = this; 
+            setTimeout(function() {
+                vm.counter = 0; 
+            }, 2000)
+          }
+      }
+    });
+  </script>
+</html>

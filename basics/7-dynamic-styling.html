@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div 
+            class="demo" 
+            @click="attachRed = !attachRed"
+            :class="{red: attachRed}"
+        ></div>
+        <!-- v-bind:class takes and object of keys(classNames) and values(true or false), vue combines the v-bind: and normal class (above) -->
+        
+        <div class="demo" :class="divClasses"></div>
+        <!-- using a computed property as class object with v-bind here -->
+        
+        <!-- using a data property as class here ( v-bind:class also accepts string classname)-->
+        <div class="demo" :class="color"></div>
+        <div class="demo" :class="[color, {red: attachRed}]"></div>
+        <!-- v-bind:class also accepts an array of class strings or class objects -->
+        <input type="text" v-model="color">
+        
+        <hr />
+
+        <!-- inline styles with v-bind:style -->
+        <div class="demo" :style="{ 'background-color': color }"></div>
+        <div class="demo" :style="{ backgroundColor: color }"></div>
+        <!-- both works same -->
+
+
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            attachRed: false,  
+            color: 'green', 
+            width: 100, 
+        },
+        computed: { // we can use computed properties as class objects too 
+            divClasses: function() {
+                return {
+                   green: this.attachRed, 
+                   blue:  !this.attachRed, 
+                }
+            },
+            divStyles: function () {
+                return {
+                    backgroundColor: this.color, 
+                    width: this.width + 'px', 
+                }
+            }
+        }
+    })
+</script>
+<style>
+    .demo {
+        width: 100px; 
+        height: 100px; 
+        background-color: gray;
+        display: inline-block; 
+        margin: 10px; 
+    }
+    .red {
+        background-color: red;
+    }
+    .blue {
+        background-color: blue;
+    }
+    .green {
+        background-color: green;
+    }
+</style>
+
+
+</html>

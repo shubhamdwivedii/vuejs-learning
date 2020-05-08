@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <button @click="show = !show">Switch</button>
+        <p v-if="show">You can see me!</p>
+        <!-- v-if attaches or detaches elements to the DOM, it does not just hide them -->
+        <p v-else>Now You Don't</p>
+        <!-- v-else refers to the latest v-if in front of it (above) -->
+        <!-- v-else is just a shortcut to v-if="!priorCondition" -->
+
+        <!-- template can be used to group elements (like Fragment in React), template does not appear in actual DOM. -->
+        <template v-if="!show">
+            <h2>Random Heading</h2>
+            <span class="demo"></span>
+        </template>
+
+        <p v-show="show">This is also visible (v-show)</p>
+        <!-- Unlike v-if, v-show hides the element ie: sets display:none, the element will remain attached to DOM. -->
+        
+    </div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            show: true, 
+        }
+    })
+</script>
+<style>
+    .demo {
+        width: 100px; 
+        height: 100px;
+        background-color: pink;
+        display: inline-block; 
+
+    }
+</style>
+</html>

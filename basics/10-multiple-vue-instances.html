@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app1">
+        <h1>{{ title }}</h1>
+        <button @click="show">Show Paragraph</button>
+        <p v-if="showParagraph">This is not always visible</p>
+    </div>
+
+    <div id="app2">
+        <h1>{{ title }}</h1>
+        <!-- This title is different from above one (As it is from app2 instance) -->
+        <button @click="onChange">Change Something in Vue Instance 1 (vm1)</button>
+    </div>
+</body>
+<script>
+    var vm1 = new Vue({ // vm stands for View Model
+        el: '#app1',
+        data: {
+            title: 'The VueJS Instance', 
+            showParagraph: false, 
+        },
+        methods: {
+            show: function() {
+                this.showParagraph = true; 
+                this.updateTitle('The VueJS Instance (UPDATED)') 
+                // methods can also be accessed via this 
+            },
+            updateTitle: function(title) {
+                this.title = title; 
+            }
+        },
+        computed: {
+            lowercaseTitle: function() {
+                return this.title.toLowerCase(); 
+            }
+        },
+
+        // NOTE: data, methods, and computed elements are all proxied into the instance object (this) by VueJS
+
+        watch: {
+            title: function(value) {
+                alert('Title changed, new value: ' + value);
+            }
+        }
+
+
+    })
+
+    setTimeout(function() { // this is a valid javascript code where we interact with a vue instance from outside.
+        vm1.title = "Changed by Timer!";
+        vm1.show(); // is also valid
+    }, 3000)
+
+    // You cannot create new properties like: 
+    vm1.newProp = 'New!!!' // this property will be added to vm1 object, but no getters, setters, and watchers will be generated for it, hence Vue will not react to it. 
+    console.log(vm1) // To see what I mean here.
+
+
+
+    var vm2 = new Vue({ // Second Vue instance
+        el: '#app2',
+        data: {
+            title: 'The Second Instance', // there is no connection between two vue instances, title here is different than title in above instance
+        },
+        methods: {
+            onChange: function() {
+                vm1.title = 'Changed By Second Vue Instance (vm2)!'
+            }
+        }
+    })
+
+
+</script>
+
+</html>

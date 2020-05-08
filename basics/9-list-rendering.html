@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="food in foods">{{ food }}</li>
+        <!-- v-for="item in list" iterates an array where item is the i-th array element in the i-th iteration -->
+      </ul>
+      <hr />
+
+      <ul>
+        <li v-for="(food, idx) in foods">{{ food }} ({{ idx + 1 }})</li>
+        <!-- you can also get the index of the element this way (starts with zero) -->
+      </ul>
+      <hr />
+
+      <!-- VueJs automatically tracks the array, therefore this push orperation results in expected behavior (lists will be rerenderd in DOM) unlike in React. -->
+      <button @click="foods.push('burger'+(foods.length - 3))">Add Food</button>
+      <!-- VueJs proxies the Array.push() method which normally just pushes new element to existing array, whereas in VueJs a new Array is reassinged to the reference that Vue is watching -->
+
+      <!-- To be super save always add a unique key via v-bind:key to the list-->
+      <ul>
+        <li v-for="(food, i) in foods" :key="i">{{ food }}</li> <!-- avoid using index in real applications -->
+      </ul>
+      <!-- when a unique key is binded with v-bind:key for each element of an array, Vue not only tracks the array itself but each element in that array for changes -->
+
+      <!-- use template when you want to render some other html element(s) other than <li> -->
+      <template v-for="(food, idx) in foods">
+        <h3>{{ food }}</h3>
+        <h4>{{ idx }}</h4>
+      </template>
+
+      <!-- looping through object properties (see nested v-for loop)-->
+      <ul>
+        <li v-for="person in persons">
+          <!-- nested v-for loop  -->
+          <span v-for="value in person"> {{ value }} </span>
+        </li>
+      </ul>
+
+      <ul>
+        <li v-for="person in persons">
+          <!-- just like index, you can get the key of the property  -->
+          <div v-for="(value, key) in person">{{ key + ": "+ value }}</div>
+          <!-- you can also get index as: v-for="(value, key, index) in person" -->
+          <br />
+        </li>
+      </ul>
+
+      <!-- to simply loop through numbers (like in python for x in range(10)) -->
+      <span v-for="n in 10"> {{ n }} </span>
+    </div>
+  </body>
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        foods: ["bread", "pasta", "pizza", "cake"],
+        persons: [
+          { name: "Shubham", age: 26, color: "blue" },
+          { name: "Bharat", age: 46, color: "green" },
+          { name: "Tushar", age: 64, color: "bitch" }
+        ]
+      }
+    });
+  </script>
+</html>

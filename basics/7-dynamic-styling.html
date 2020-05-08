@@ -32,6 +32,15 @@
         <div class="demo" :style="{ backgroundColor: color }"></div>
         <!-- both works same -->
 
+        <!-- computed properties can also be used with v-bind:style  -->
+        <div class="demo" :style="divStyles"></div> 
+        <input type="text" v-model="width">
+
+        <hr />
+        <div class="demo" :style="[myStyle, {height: width + 'px'}]"></div>
+        <!-- array sytax example with inline javascript code -->
+
+
 
     </div>
 </body>
@@ -40,8 +49,8 @@
         el: '#app',
         data: {
             attachRed: false,  
-            color: 'green', 
-            width: 100, 
+            color: 'gray', 
+            width: 150, 
         },
         computed: { // we can use computed properties as class objects too 
             divClasses: function() {

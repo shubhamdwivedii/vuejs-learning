@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app1">
+        <h2 ref="headingOne">{{ title }}</h2>
+        <button @click="show" ref="showButton">Show Paragraph</button>
+        <!-- Vue automatically stores all refs inside $refs property in the Vue instance -->
+
+        <p v-if="showParagraph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, qui dolores. Culpa quas, quia repudiandae ratione in illum beatae? Quis iusto accusantium ea pariatur doloremque architecto qui cum omnis! Ex?</p>
+    </div>
+
+    <div id="app2">
+        <h2>{{ title }}</h2>
+    </div>
+</body>
+<script>
+    var vm1 = new Vue({
+        el: '#app1',
+        data: { // Vue does not copies this object instead simply stores its reference in its $data property and proxies the properties in this data object to the Vue instance object.
+            title: 'Vue Instance One',
+            showParagraph: false, 
+        },
+
+        methods: {
+            show: function() {
+                this.showParagraph = !this.showParagraph; 
+                this.$refs.showButton.innerText = this.showParagraph ? 'Hide Paragraph' : 'Show Paragraph';
+                // All refs can be accessed in $refs property both instide (this.$refs) and outside (vm1.$refs) the Vue instance. 
+            }
+        }
+    })
+
+
+
+    // We can access the title data by following ways 
+    console.log(vm1.title) // as Vues proxies the data properties to Vue instance object 
+    // OR 
+    console.log(vm1.$data.title) // the data Object passed above is stored as $data inside the Vue instance object. 
+    // ALSO 
+    console.log(vm1.title === vm1.$data.title) // will be true
+
+
+
+    setTimeout(function() {
+        vm1.$refs.headingOne.innerText = "Instance One Heading (Updated)"
+        // Accessing refs from outside the Vue instance. 
+    }, 3000) // Note: This code is NOT reactive ie: this code will only run once, everytime when Vue instance re-renders this code may not have any effect on the Vue instance later on.  
+
+
+    var dataObj = {
+        title: 'Vue Second Instance'
+    }
+
+    var vm2 = new Vue({
+        el: '#app2',
+        data: dataObj // the dataObj ref will be stored in Vue instance's $data. 
+    })
+
+    console.log(dataObj === vm2.$data) // will be true 
+
+
+</script>
+
+</html> 

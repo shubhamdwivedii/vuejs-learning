@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="vue.js"></script>
+  </head>
+  <body>
+    <div id="app1">
+      <h2>{{ title }}</h2>
+      <welcome></welcome> <!-- Will result in a warning -->
+      <!-- This welcome component will not appear, as it was not declared before this Vue instance. -->
+    </div>
+
+    <div id="app2">
+      <h2>{{ title }}</h2>
+      <!-- Since no Vue app is mounted on "app2", the "{{ title }}" will appear as is on the html -->
+    </div>
+
+    <div id="app3">
+      <h2>This Will Not Appear</h2>
+      <!-- As app3 vue instance (vm3) uses a template, the content of #app3 here will be replaced by the vue instance's template -->
+    </div>
+
+    <div class="hello"></div>
+    <!-- Only First One Will Appear.-->
+    <div class="hello"></div>
+    <div class="hello"></div>
+
+    <hello></hello>
+    <!-- Again Only First One Will Appear. -->
+    <hello></hello>
+    <hello></hello>
+
+    <div id="app6">
+      <welcome></welcome>
+      {{ title }}
+      <welcome></welcome>
+      <welcome></welcome>
+    </div>
+  </body>
+  <script>
+    var vm1 = new Vue({
+      // no el property defined here
+      data: {
+        title: "Instance One"
+      }
+    });
+
+    vm1.$mount("#app1"); // mounting a Vue instance using $mount() inbuilt method.
+    // note '#app1' will be stored in $el property of the Vue instance now.
+
+    var vm3 = new Vue({
+      template: `<h1>Hello!</h1>`
+      // This template will replace the '#app3' content.
+    });
+
+    vm3.$mount("#app3");
+    // This will work same as below
+    // document.getElementById('app3').appendChild(vm3.$el) // Avoid using this way.
+
+    var vm4 = new Vue({
+      el: ".hello", // Note: el (element selector) will only select the first matching element it finds.
+      // (ie: only first element with class "hello" will mount this vue instance, rest will remain unaffected)
+      template: "<h1>Hello</h1>"
+    });
+
+    var vm5 = new Vue({
+      el: "hello", // Same as before, this will only effect the first <hello> tag element.
+      template: "<h1>Hello Again</h1>"
+    });
+
+    // Use this component as <welcome>
+    Vue.component("welcome", {
+      template: "<h2>Welcome</h2>"
+    });
+    // Note: Component must be declared before the Vue instance it is Used inside.
+    var vm6 = new Vue({
+      el: "#app6",
+      data: {
+        title: "Instance With Components"
+      }
+    });
+
+    // NOW: Read about VueJS's Virtual DOM and VueJS Instance LIFECYCLE. 
+
+  </script>
+</html>

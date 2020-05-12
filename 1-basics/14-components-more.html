@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ title }}</h1>
+        <my-cmp-one></my-cmp-one>
+        <my-cmp-two></my-cmp-two>
+    </div>
+
+    <div id="app2">
+        <h1>{{ title }}</h1>
+        <my-cmp-three></my-cmp-three>
+        <my-cmp-three></my-cmp-three>
+        <!-- Clicking "Change" on one will also effect other's data -->
+        <hr />
+        <my-cmp-four></my-cmp-four>
+        <my-cmp-four></my-cmp-four>
+        <!-- Clicking "Change" on one will NOT effect other's data -->
+    </div>
+
+</body>
+<script>
+    Vue.component('my-cmp-one', {
+        data: { // This will not work as this data property will conflict with the Vue instance's data property. 
+            status: "Hidden", 
+        },
+        template: '<p>Server Status: {{ status }}</p>'
+        // status will not appear in this component
+    })
+
+    Vue.component('my-cmp-two', {
+        data: function () { // a function should retrun the data object in component instead.
+            return {
+                status: "Critical", 
+            }
+        },
+        template: '<p>Server Status: {{ status }}</p>'
+    })
+
+    new Vue({
+        el: '#app',
+        data: {
+            title: "Shubham",  // title will also not appear as confict will occur with my-cmp-one's data
+        }
+    })
+
+    let data = {
+        status: 'Critical',
+    }
+
+    Vue.component('my-cmp-three', {
+        data: function() {
+            return data; // this will return the above data obj (reference) each time this component is used. 
+            // Therefore every instance of this component will share the same data object. 
+        },
+        template: `<p>Status Three: {{ status }} (<button @click="changeStatus">Change</button>)</p>`,
+        methods: { // component can have methods too. 
+            changeStatus: function() {
+                this.status = 'Normal'; // this keyword here will point to same data object (declared above)
+                // Again we can use this keyword to access dataObj (Vue will automatically handle this even for components)
+            }
+        }
+    })
+
+    Vue.component('my-cmp-four', {
+        data: function() {
+            return { // Here we are returning a new object every time this component is used. 
+            // Therefore every instance of this component will have different data object.
+                status: 'Critical', 
+            }
+        },
+        template: `<p>Status Four: {{ status }} (<button @click="changeStatus">Change</button>)</p>`,
+        methods: {
+            changeStatus: function() {
+                this.status = 'Normal'; // this keyword here will point to different objects 
+            }
+        }
+    })
+
+
+
+
+    new Vue({
+        el: '#app2',
+        data: {
+            title: "Dwivedi"
+        }
+    })
+
+
+
+</script>
+
+</html>

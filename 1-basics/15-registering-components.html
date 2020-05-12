@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app1">
+        <h1>{{ title }}</h1>
+        <global-cmp></global-cmp>
+        <local-cmp-one></local-cmp-one>
+        <local-cmp-two></local-cmp-two> <!-- this will not appear -->
+    </div>
+    <hr />
+    <div id="app2">
+        <h1>{{ title }}</h1>
+        <global-cmp></global-cmp>
+        <local-cmp-one></local-cmp-one> <!-- this will not appear -->
+        <local-cmp-two></local-cmp-two> 
+    </div>
+</body>
+<script>
+    Vue.component('global-cmp', {
+        template: '<h3>Global Component<h3>'
+    })
+
+    let cmpOne = {
+        template: '<h3>Local Component App One</h3>'
+    }
+
+    let cmpTwo = {
+        template: '<h3>Local Component App Two</h3>'
+    }
+
+
+    new Vue({
+        el: '#app1',
+        data: {
+            title: 'App One',
+        },
+        components: { // register local components for this Vue instance here
+            'local-cmp-one': cmpOne, // use selector as key (tag for component)
+         }
+    })
+
+    new Vue({
+        el: '#app2',
+        data: {
+            title: 'App Two', 
+        },
+        components: {
+            'local-cmp-two': cmpTwo, 
+        }
+    })
+</script>
+
+</html>

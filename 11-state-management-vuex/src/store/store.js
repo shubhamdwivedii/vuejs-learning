@@ -1,22 +1,25 @@
 import Vue from "vue";
 import Vuex from "vuex";
-
+import value from './modules/value'; 
 // Registering Vuex (just like any other vue plugin)
 Vue.use(Vuex); // gives us some additional tools
 
 export const store = new Vuex.Store({
   state: {
     // we can store all our properties inside this state object
-    counter: 0
+    counter: 0,
+    // value: 0, // for two way binding.  moved to separate module
   },
-  getters: {
+
+  getters: { // getters are used to access the state. 
     doubleCounter: state => {
       // every getter function will get state as an argument
       return state.counter * 2;
     },
     stringCounter: state => {
       return state.counter + " Clicks";
-    }
+    },
+    // value: state => state.value, moved to separate module 
   },
 
   // ALWAYS try to use mutations through actions and not directly in code (components)
@@ -37,7 +40,10 @@ export const store = new Vuex.Store({
       },
       addBy: (state, payload) => {
           state.counter += payload
-      }
+      },
+      // updateValue: (state, payload) => { 
+      //   state.value = payload; 
+      // }
   },
 
   // actions CAN be ASYNCHRONOUS
@@ -66,6 +72,16 @@ export const store = new Vuex.Store({
         setTimeout(() => {
             commit('addBy', add)
         }, after*1000)
-    }
-  }  
+    },
+
+    // updateValue({commit}, payload) {
+    //   commit('updateValue', payload)
+    // }
+  },
+  
+  // Load any modules here
+  modules: {
+    value,  // value contains state, getters, mutations and actions 
+  }
+
 });
